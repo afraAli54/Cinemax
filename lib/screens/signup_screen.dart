@@ -35,17 +35,15 @@ class _SignupScreenState extends State<SignupScreen> {
                       Navigator.pushNamed(context, 'login-SignUpPage');
                     },
                     child: Container(
-                      height: 60,
-                      width: 60,
+                      height: 40,
+                      width: 40,
                       decoration: BoxDecoration(
                         color: AppColors.primarySoft,
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 16),
                       child: SvgPicture.asset(
                         "assets/images/arrow-back.svg",
-                        fit: BoxFit.contain,
+                        fit: BoxFit.scaleDown,
                       ),
                     ),
                   ),

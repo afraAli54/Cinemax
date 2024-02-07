@@ -9,44 +9,38 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        centerTitle: true,
+        title: Text(
+          "Login",
+          style:
+          AppTypography.h4SemiBold.copyWith(color: Colors.white),
+        ),
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.pushNamed(context, 'login-SignUpPage');
+          },
+          child: Container(
+            margin: EdgeInsets.all(5),
+            height: 40,
+            width: 40,
+            decoration: BoxDecoration(
+              color: AppColors.primarySoft,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: SvgPicture.asset(
+              "assets/images/arrow-back.svg",
+              fit: BoxFit.scaleDown,
+            ),
+          ),
+        ),
+      ),
       backgroundColor: AppColors.primaryDark,
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 10),
-              child: Row(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pushNamed(context, 'login-SignUpPage');
-                    },
-                    child: Container(
-                      height: 60,
-                      width: 60,
-                      decoration: BoxDecoration(
-                        color: AppColors.primarySoft,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 16),
-                      child: SvgPicture.asset(
-                        "assets/images/arrow-back.svg",
-                        fit: BoxFit.contain,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 100,
-                  ),
-                  Text(
-                    "Login",
-                    style:
-                        AppTypography.h4SemiBold.copyWith(color: Colors.white),
-                  )
-                ],
-              ),
-            ),
+            SizedBox(height: 50,) ,
             Text(
               "Hi , Tiffany",
               style: AppTypography.h2SemiBold.copyWith(color: Colors.white),

@@ -41,7 +41,7 @@ class _OnboardingState extends State<Onboarding> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   _buildPageIndicator(),
-                  SizedBox(width: 150),
+                  const SizedBox(width: 150),
                   _buildNextButton(),
                 ],
               ),
@@ -79,14 +79,14 @@ class _OnboardingState extends State<Onboarding> {
         if (_currentPage < 2) {
           _pageController.animateToPage(
             _currentPage + 1,
-            duration: Duration(milliseconds: 500),
+            duration: const Duration(milliseconds: 500),
             curve: Curves.ease,
           );
           setState(() {
             _currentPage = _currentPage + 1;
           });
         } else {
-          Navigator.pushNamed(context, 'splashPage');
+          Navigator.pushReplacementNamed(context, 'splashPage');
         }
       },
       child: Container(
@@ -97,11 +97,7 @@ class _OnboardingState extends State<Onboarding> {
           borderRadius: BorderRadius.circular(20),
         ),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: Image.asset(
-          'assets/images/arrow-back.png',
-          fit: BoxFit.contain,
-          color: Colors.black,
-        ),
+        child: const Icon(Icons.arrow_forward_ios)
       ),
     );
   }

@@ -20,7 +20,7 @@ class OnboardingV1 extends StatelessWidget {
                 child: Container(
                   width: 226,
                   height: 226,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     shape: BoxShape.circle,
                     color: AppColors.secondaryOrange,
                   ),
