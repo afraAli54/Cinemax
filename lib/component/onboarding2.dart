@@ -5,10 +5,9 @@ import 'package:cinemax/widgets/movie_view.dart';
 import 'package:flutter/material.dart';
 
 class OnboardingV2 extends StatelessWidget {
-  PageController _pageController = PageController(initialPage: 0);
-
   @override
   Widget build(BuildContext context) {
+    AppTypography typography = AppTypography();
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -47,8 +46,7 @@ class OnboardingV2 extends StatelessWidget {
                 Center(
                   child: Text(
                     'Offers ad-free viewing of high quality',
-                    style:
-                        AppTypography.h1SemiBold.copyWith(color: Colors.white),
+                    style: typography.h1SemiBold.copyWith(color: Colors.white),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -56,7 +54,7 @@ class OnboardingV2 extends StatelessWidget {
                 Center(
                   child: Text(
                     'Semper in cursus magna et eu varius nunc adipiscing. Elementum justo, laoreet id sem semper parturient. ',
-                    style: AppTypography.h5Medium.copyWith(color: Colors.white),
+                    style: typography.h5Medium.copyWith(color: Colors.white),
                     textAlign: TextAlign.center,
                   ),
                 ),

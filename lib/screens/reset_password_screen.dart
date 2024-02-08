@@ -1,5 +1,6 @@
 import 'package:cinemax/style_guide/app_colors.dart';
 import 'package:cinemax/style_guide/app_typography.dart';
+import 'package:cinemax/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -8,6 +9,7 @@ class ResetPasswordScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AppTypography typography = AppTypography();
     return Scaffold(
       backgroundColor: AppColors.primaryDark,
       body: SingleChildScrollView(
@@ -19,7 +21,7 @@ class ResetPasswordScreen extends StatelessWidget {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      Navigator.pushNamed(context, 'loginPage');
+                      Navigator.pushNamed(context, '/loginPage');
                     },
                     child: Container(
                       height: 60,
@@ -44,29 +46,17 @@ class ResetPasswordScreen extends StatelessWidget {
             ),
             Text(
               "Reset Password",
-              style: AppTypography.h1SemiBold.copyWith(color: Colors.white),
+              style: typography.h1SemiBold.copyWith(color: Colors.white),
             ),
             Text(
               "Recover your account password",
-              style: AppTypography.h6Medium.copyWith(color: Colors.white),
+              style: typography.h6Medium.copyWith(color: Colors.white),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 70),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-              child: TextField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(50.0),
-                    borderSide: BorderSide(color: AppColors.primarySoft),
-                    gapPadding: 10,
-                  ),
-                  labelText: 'Email Address',
-                  hintText: 'Enter Your Email',
-                ),
-                style: AppTypography.h6Medium
-                    .copyWith(color: AppColors.textWhiteGrey),
-              ),
+            const CustomTextField(
+              labelText: 'Email Address',
+              hintText: 'Enter Your Email',
             ),
             SizedBox(
               height: 16,
@@ -76,10 +66,10 @@ class ResetPasswordScreen extends StatelessWidget {
               width: 350,
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, 'createPassword');
+                  Navigator.pushNamed(context, '/createPassword');
                 },
                 child: Text("Next",
-                    style: AppTypography.h3Medium
+                    style: typography.h3Medium
                         .copyWith(color: AppColors.textWhite)),
                 style: ButtonStyle(
                   backgroundColor:

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 class OnboardingV3 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    AppTypography typography = AppTypography();
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -58,8 +59,7 @@ class OnboardingV3 extends StatelessWidget {
                 Center(
                   child: Text(
                     'Our service brings together your favorite series',
-                    style:
-                        AppTypography.h1SemiBold.copyWith(color: Colors.white),
+                    style: typography.h1SemiBold.copyWith(color: Colors.white),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -67,7 +67,7 @@ class OnboardingV3 extends StatelessWidget {
                 Center(
                   child: Text(
                     'Semper in cursus magna et eu varius nunc adipiscing. Elementum justo, laoreet id sem semper parturient.',
-                    style: AppTypography.h5Medium.copyWith(color: Colors.white),
+                    style: typography.h5Medium.copyWith(color: Colors.white),
                     textAlign: TextAlign.center,
                   ),
                 ),

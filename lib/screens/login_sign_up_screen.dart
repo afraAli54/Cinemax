@@ -8,8 +8,9 @@ class LoginSignUpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async => false,
+    AppTypography typography = AppTypography();
+    return PopScope(
+      canPop: false,
       child: Scaffold(
         backgroundColor: AppColors.primaryDark,
         body: Column(
@@ -25,8 +26,8 @@ class LoginSignUpScreen extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 100),
                 child: Text(
                   "Enter your registered Phone Number to Sign Up",
-                  style: AppTypography.h5SemiBold
-                      .copyWith(color: AppColors.textGrey),
+                  style:
+                      typography.h5SemiBold.copyWith(color: AppColors.textGrey),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -39,14 +40,14 @@ class LoginSignUpScreen extends StatelessWidget {
               width: 350,
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, 'signUpPage');
+                  Navigator.pushNamed(context, '/signUpPage');
                 },
-                child:
-                    const Text("Sign UP", style: TextStyle(color: Colors.white)),
                 style: ButtonStyle(
                   backgroundColor:
                       MaterialStateProperty.all<Color>(AppColors.primaryBlue),
                 ),
+                child: const Text("Sign UP",
+                    style: TextStyle(color: Colors.white)),
               ),
             ),
             Padding(
@@ -57,16 +58,16 @@ class LoginSignUpScreen extends StatelessWidget {
                 children: [
                   Text(
                     "I already have an account?",
-                    style: AppTypography.h4SemiBold
+                    style: typography.h4SemiBold
                         .copyWith(color: AppColors.textGrey),
                   ),
                   GestureDetector(
                     onTap: () {
-                      Navigator.pushNamed(context, 'loginPage');
+                      Navigator.pushNamed(context, '/loginPage');
                     },
                     child: Text(
                       '  Login',
-                      style: AppTypography.h4SemiBold
+                      style: typography.h4SemiBold
                           .copyWith(color: AppColors.primaryBlue),
                     ),
                   ),

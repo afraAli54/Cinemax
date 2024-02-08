@@ -86,19 +86,18 @@ class _OnboardingState extends State<Onboarding> {
             _currentPage = _currentPage + 1;
           });
         } else {
-          Navigator.pushReplacementNamed(context, 'splashPage');
+          Navigator.pushReplacementNamed(context, '/splashPage');
         }
       },
       child: Container(
-        height: 60,
-        width: 60,
-        decoration: BoxDecoration(
-          color: AppColors.primaryBlue,
-          borderRadius: BorderRadius.circular(20),
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: const Icon(Icons.arrow_forward_ios)
-      ),
+          height: 60,
+          width: 60,
+          decoration: BoxDecoration(
+            color: AppColors.primaryBlue,
+            borderRadius: BorderRadius.circular(20),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: const Icon(Icons.arrow_forward_ios)),
     );
   }
 }

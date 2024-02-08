@@ -1,5 +1,6 @@
 import 'package:cinemax/style_guide/app_colors.dart';
 import 'package:cinemax/style_guide/app_typography.dart';
+import 'package:cinemax/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -8,6 +9,7 @@ class CreatePassword extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AppTypography typography = AppTypography();
     return Scaffold(
       backgroundColor: AppColors.primaryDark,
       body: SingleChildScrollView(
@@ -19,7 +21,7 @@ class CreatePassword extends StatelessWidget {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      Navigator.pushNamed(context, 'resetPassword');
+                      Navigator.pushNamed(context, '/resetPassword');
                     },
                     child: Container(
                       height: 60,
@@ -44,49 +46,23 @@ class CreatePassword extends StatelessWidget {
             ),
             Text(
               "Create New Password",
-              style: AppTypography.h1SemiBold.copyWith(color: Colors.white),
+              style: typography.h1SemiBold.copyWith(color: Colors.white),
             ),
             Text(
               "Enter your new password",
-              style: AppTypography.h6Medium.copyWith(color: Colors.white),
+              style: typography.h6Medium.copyWith(color: Colors.white),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 50),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-              child: TextField(
-                obscureText: true,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(50.0),
-                    borderSide: BorderSide(color: AppColors.primarySoft),
-                    gapPadding: 10,
-                  ),
-                  labelText: 'New Password',
-                  hintText: 'Enter Your New Password',
-                  suffixIcon: Icon(Icons.visibility_off),
-                ),
-                style: AppTypography.h6Medium
-                    .copyWith(color: AppColors.textWhiteGrey),
-              ),
+            const CustomTextField(
+              labelText: 'New Password',
+              hintText: 'Enter Your New Password',
+              isPassword: true,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: TextField(
-                obscureText: true,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(50.0),
-                    borderSide: BorderSide(color: AppColors.primarySoft),
-                    gapPadding: 10,
-                  ),
-                  labelText: 'Confirm Password',
-                  hintText: 'Confirm Your Password',
-                  suffixIcon: Icon(Icons.visibility_off),
-                ),
-                style: AppTypography.h6Medium
-                    .copyWith(color: AppColors.textWhiteGrey),
-              ),
+            const CustomTextField(
+              labelText: 'Confirm Password',
+              hintText: 'Confirm Your Password',
+              isPassword: true,
             ),
             const SizedBox(
               height: 50,
@@ -96,13 +72,13 @@ class CreatePassword extends StatelessWidget {
               width: 350,
               child: ElevatedButton(
                 onPressed: () {},
-                child: Text("Reset",
-                    style: AppTypography.h3Medium
-                        .copyWith(color: AppColors.textWhite)),
                 style: ButtonStyle(
                   backgroundColor:
                       MaterialStateProperty.all<Color>(AppColors.primaryBlue),
                 ),
+                child: Text("Reset",
+                    style: typography.h3Medium
+                        .copyWith(color: AppColors.textWhite)),
               ),
             ),
           ],
