@@ -25,7 +25,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             ),
             headers: {
               'Authorization':
-                  'Bearer IsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.HZuafUc_RInT-PAK9Qx4FqcEZcLaJ0kwVc-9Y5IXTOg', // Replace with your API key for generating request tokens
+                  'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0NWExZWU5YzVhNTIzOTY2NjlkY2VkMzZiMjlhNmQ2MSIsInN1YiI6IjY1YzMzMDVhOTVhY2YwMDE2MjFjMTkyOCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.HZuafUc_RInT-PAK9Qx4FqcEZcLaJ0kwVc-9Y5IXTOg',
               'Accept': 'application/json',
             },
           );

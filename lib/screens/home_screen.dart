@@ -7,6 +7,7 @@ import 'package:cinemax/widgets/movie_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
 
 class HomeScreen extends StatefulWidget {
@@ -60,9 +61,11 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: Colors.transparent,
-        elevation: 0,
-        flexibleSpace: Padding(
-          padding: const EdgeInsets.only(left: 16, bottom: 8),
+        //elevation: 0,
+        flexibleSpace: Container(
+          height: 200,
+          width: 200,
+          padding: const EdgeInsets.only(left: 20.0),
           child: Row(
             children: [
               CircleAvatar(
@@ -70,13 +73,37 @@ class _HomeScreenState extends State<HomeScreen> {
                     AssetImage('assets/images/profile-picture.png'),
                 radius: 20,
               ),
-              SizedBox(width: 8),
-              Text(
-                'Hello, $userName',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
+              SizedBox(width: 12),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Hello, $userName',
+                    style: typography.h4SemiBold
+                        .copyWith(color: AppColors.textWhite),
+                  ),
+                  Text(
+                    'Let’s stream your favorite movie',
+                    style:
+                        typography.h6Medium.copyWith(color: AppColors.textGrey),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                width: 70,
+              ),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Container(
+                  width: 32,
+                  height: 32,
+                  color: AppColors.primarySoft,
+                  child: SvgPicture.asset(
+                    "assets/images/heart.svg",
+                    height: 24,
+                    width: 24,
+                  ),
                 ),
               ),
             ],
@@ -87,28 +114,38 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: CircleAvatar(
-                  backgroundImage:
-                      const AssetImage('assets/images/profile-picture.png'),
-                  radius: 50,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: TextField(
+              decoration: InputDecoration(
+                labelText: 'Search a title',
+                labelStyle: TextStyle(color: AppColors.textDarkGrey),
+                filled: true,
+                fillColor: AppColors.primarySoft,
+                contentPadding:
+                    EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                prefixIcon: Icon(Icons.search, color: AppColors.textDarkGrey),
+                prefixIconConstraints:
+                    BoxConstraints(minWidth: 48, minHeight: 48),
+                suffixIcon: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: 1,
+                      height: 24,
+                      color: AppColors.textGrey,
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.more_horiz, color: AppColors.textWhite),
+                      onPressed: () {},
+                    ),
+                  ],
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(24),
+                  borderSide: BorderSide.none,
                 ),
               ),
-              Text(
-                'Hello, $userName',
-                style: typography.h2Medium.copyWith(color: AppColors.textWhite),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          TextField(
-            decoration: InputDecoration(
-              labelText: 'Search',
-              prefixIcon: Icon(Icons.search),
-              border: OutlineInputBorder(),
             ),
           ),
           Expanded(
@@ -118,8 +155,8 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           SizedBox(height: 16),
           Text(
-            'Most Popular Movie',
-            style: typography.h2Medium.copyWith(color: AppColors.textWhite),
+            'Most Popular',
+            style: typography.h4SemiBold.copyWith(color: AppColors.textWhite),
           ),
           SizedBox(height: 8),
           Expanded(
