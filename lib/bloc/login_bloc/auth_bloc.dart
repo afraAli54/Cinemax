@@ -20,10 +20,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           );
 
           final responseToken = await http.get(
-            Uri.parse('https://api.themoviedb.org/3/authentication/token/new'),
+            Uri.parse(
+              'https://api.themoviedb.org/3/authentication/token/new',
+            ),
             headers: {
               'Authorization':
-                  'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0NWExZWU5YzVhNTIzOTY2NjlkY2VkMzZiMjlhNmQ2MSIsInN1YiI6IjY1YzMzMDVhOTVhY2YwMDE2MjFjMTkyOCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.HZuafUc_RInT-PAK9Qx4FqcEZcLaJ0kwVc-9Y5IXTOg',
+                  'Bearer IsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.HZuafUc_RInT-PAK9Qx4FqcEZcLaJ0kwVc-9Y5IXTOg', // Replace with your API key for generating request tokens
               'Accept': 'application/json',
             },
           );
@@ -31,11 +33,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           if (responseToken.statusCode == 200) {
             final dataToken = json.decode(responseToken.body);
             final requestToken = dataToken['request_token'];
-            //final authenticationUrl = 'https://www.themoviedb.org/authenticate/$requestToken';
 
             final responseSession = await http.post(
               Uri.parse(
-                  'https://api.themoviedb.org/3/authentication/session/new'),
+                'https://api.themoviedb.org/3/authentication/session/new',
+              ),
               headers: {
                 'Authorization': 'Bearer 45a1ee9c5a52396669dced36b29a6d61',
                 'Accept': 'application/json',
@@ -70,9 +72,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       } else if (event is SignUpEvent) {
         emit(SignUpLoading());
         try {
-          UserCredential userCredential = await FirebaseAuth.instance
-              .createUserWithEmailAndPassword(
-                  email: event.email, password: event.password);
+          UserCredential userCredential =
+              await FirebaseAuth.instance.createUserWithEmailAndPassword(
+            email: event.email,
+            password: event.password,
+          );
 
           Map<String, dynamic> data = {
             'name': event.userName,
@@ -90,12 +94,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           emit(SignUpSuccess());
         } on FirebaseAuthException catch (ex) {
           if (ex.code == 'weak-password') {
-            emit(SignUpFailure('weakly password'));
+            emit(SignUpFailure('Weak password'));
           } else if (ex.code == 'email-already-in-use') {
-            emit(SignUpFailure('email already in used'));
+            emit(SignUpFailure('Email already in use'));
           }
         } catch (e) {
-          emit(SignUpFailure('something went wrong'));
+          emit(SignUpFailure('Something went wrong'));
         }
       }
     });
