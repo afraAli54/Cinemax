@@ -4,6 +4,7 @@ import 'package:cinemax/screens/create_new_password.dart';
 import 'package:cinemax/screens/home_screen.dart';
 import 'package:cinemax/screens/login_screen.dart';
 import 'package:cinemax/screens/reset_password_screen.dart';
+import 'package:cinemax/screens/search_screen.dart';
 import 'package:cinemax/screens/signup_screen.dart';
 import 'package:cinemax/screens/onboarding_screen.dart';
 import 'package:cinemax/screens/login_sign_up_screen.dart';
@@ -40,6 +41,7 @@ class MyApp extends StatelessWidget {
         home: Onboarding(),
         routes: {
           '/home': (context) => HomeScreen(),
+          '/search': (context) => SearchScreen(),
           '/splashPage': (context) => const SplashScreen(),
           '/signUpPage': (context) => const SignupScreen(),
           '/loginPage': (context) => LoginScreen(),

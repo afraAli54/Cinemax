@@ -1,4 +1,5 @@
 import 'package:cinemax/style_guide/app_colors.dart';
+import 'package:cinemax/style_guide/app_typography.dart';
 import 'package:flutter/material.dart';
 
 class MovieCard extends StatelessWidget {
@@ -14,6 +15,7 @@ class MovieCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AppTypography typography = AppTypography();
     return Padding(
       padding: const EdgeInsets.only(left: 4, bottom: 4),
       child: Container(
@@ -43,14 +45,14 @@ class MovieCard extends StatelessWidget {
                 padding: EdgeInsets.all(8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Text(
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       movieName,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: typography.h5SemiBold
+                          .copyWith(color: AppColors.textWhite),
                     ),
                     SizedBox(height: 4),
                     Text(

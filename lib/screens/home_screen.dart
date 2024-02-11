@@ -1,8 +1,11 @@
 import 'dart:convert';
 
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cinemax/model/movie_model.dart';
 import 'package:cinemax/style_guide/app_colors.dart';
 import 'package:cinemax/style_guide/app_typography.dart';
+import 'package:cinemax/widgets/bottom_navigation_bar.dart';
+import 'package:cinemax/widgets/home_slider_card.dart';
 import 'package:cinemax/widgets/movie_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -17,12 +20,15 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String userName = '';
+  String movieAPI = '';
+
+  int _currentSlideIndex = 0;
 
   @override
   void initState() {
     super.initState();
     fetchUserName();
-    fetchPopularMovies();
+    fetchMovies(movieAPI);
   }
 
   Future<void> fetchUserName() async {
@@ -37,9 +43,9 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  Future<List<Movie>> fetchPopularMovies() async {
+  Future<List<Movie>> fetchMovies(String movieAPI) async {
     const apiKey = '45a1ee9c5a52396669dced36b29a6d61';
-    const url = 'https://api.themoviedb.org/3/movie/popular?api_key=$apiKey';
+    final url = '$movieAPI?api_key=$apiKey';
 
     final response = await http.get(Uri.parse(url));
 
@@ -51,6 +57,19 @@ class _HomeScreenState extends State<HomeScreen> {
     } else {
       throw Exception('Failed to fetch popular movies');
     }
+  }
+
+  Widget _indicator(bool isActive) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 150),
+      margin: const EdgeInsets.symmetric(horizontal: 4),
+      height: 8,
+      width: isActive ? 24 : 8,
+      decoration: BoxDecoration(
+        color: isActive ? AppColors.primaryBlue : Colors.grey,
+        borderRadius: const BorderRadius.all(Radius.circular(12)),
+      ),
+    );
   }
 
   @override
@@ -65,7 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
         flexibleSpace: Container(
           height: 200,
           width: 200,
-          padding: const EdgeInsets.only(left: 20.0),
+          padding: const EdgeInsets.only(left: 20.0, top: 20),
           child: Row(
             children: [
               CircleAvatar(
@@ -110,6 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
+      bottomNavigationBar: BottomNavigationBarWidget(),
       backgroundColor: AppColors.primaryDark,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -149,19 +169,63 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           Expanded(
-            child: PageView(
-              children: [],
+            child: FutureBuilder<List<Movie>>(
+              future:
+                  fetchMovies('https://api.themoviedb.org/3/discover/movie'),
+              builder:
+                  (BuildContext context, AsyncSnapshot<List<Movie>> snapshot) {
+                if (snapshot.hasData) {
+                  final List<Movie> movies = snapshot.data!;
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 20),
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: CarouselSlider.builder(
+                        itemCount: 3,
+                        itemBuilder: (context, index, _) {
+                          final Movie movie = movies[index];
+                          return HomeSliderCard(
+                            movieName: movie.title,
+                            movieDate: movie.releaseDate,
+                            posterUrl:
+                                'https://image.tmdb.org/t/p/w500${movie.backdropPath}',
+                          );
+                        },
+                        options: CarouselOptions(
+                          viewportFraction: 0.8,
+                          initialPage: 0,
+                          onPageChanged: (index, _) {
+                            setState(() {
+                              _currentSlideIndex = index;
+                            });
+                          },
+                        ),
+                      ),
+                    ),
+                  );
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else {
+                  return const CircularProgressIndicator();
+                }
+              },
             ),
           ),
-          SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: List.generate(3, (index) {
+              return _indicator(index == _currentSlideIndex);
+            }),
+          ),
+          const SizedBox(height: 16),
           Text(
             'Most Popular',
             style: typography.h4SemiBold.copyWith(color: AppColors.textWhite),
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           Expanded(
             child: FutureBuilder<List<Movie>>(
-              future: fetchPopularMovies(),
+              future: fetchMovies('https://api.themoviedb.org/3/movie/popular'),
               builder:
                   (BuildContext context, AsyncSnapshot<List<Movie>> snapshot) {
                 if (snapshot.hasData) {
@@ -185,12 +249,31 @@ class _HomeScreenState extends State<HomeScreen> {
                 } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
                 } else {
-                  return CircularProgressIndicator();
+                  return const CircularProgressIndicator();
                 }
               },
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class DotIndicator extends StatelessWidget {
+  final bool isActive;
+  DotIndicator(this.isActive);
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 150),
+      margin: const EdgeInsets.symmetric(horizontal: 4),
+      height: 8,
+      width: isActive ? 24 : 8,
+      decoration: BoxDecoration(
+        color: isActive ? AppColors.primaryBlue : Colors.grey,
+        borderRadius: const BorderRadius.all(Radius.circular(12)),
       ),
     );
   }
