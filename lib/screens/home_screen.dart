@@ -4,7 +4,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cinemax/model/movie_model.dart';
 import 'package:cinemax/style_guide/app_colors.dart';
 import 'package:cinemax/style_guide/app_typography.dart';
-import 'package:cinemax/widgets/bottom_navigation_bar.dart';
+import 'package:cinemax/screens/index_page.dart';
 import 'package:cinemax/widgets/home_slider_card.dart';
 import 'package:cinemax/widgets/movie_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -129,7 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: BottomNavigationBarWidget(),
+      //bottomNavigationBar: BottomNavigationBarWidget(),
       backgroundColor: AppColors.primaryDark,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

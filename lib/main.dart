@@ -9,6 +9,7 @@ import 'package:cinemax/screens/signup_screen.dart';
 import 'package:cinemax/screens/onboarding_screen.dart';
 import 'package:cinemax/screens/login_sign_up_screen.dart';
 import 'package:cinemax/screens/splash_screen.dart';
+import 'package:cinemax/screens/index_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
