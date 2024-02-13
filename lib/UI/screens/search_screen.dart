@@ -1,9 +1,8 @@
 import 'dart:convert';
 
-import 'package:cinemax/model/movie_model.dart';
+import 'package:cinemax/domain/model/movie_model.dart';
 import 'package:cinemax/style_guide/app_colors.dart';
-import 'package:cinemax/screens/index_page.dart';
-import 'package:cinemax/widgets/movie_info_card.dart';
+import 'package:cinemax/UI/widgets/movie_info_card.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 

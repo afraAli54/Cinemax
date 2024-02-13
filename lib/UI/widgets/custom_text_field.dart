@@ -6,7 +6,7 @@ class CustomTextField extends StatelessWidget {
   final String labelText;
   final String hintText;
   final bool isPassword;
-  final Function(String)? onChanged;
+  final TextEditingController textConroller;
   final bool? obscureText;
 
   const CustomTextField(
@@ -14,8 +14,8 @@ class CustomTextField extends StatelessWidget {
       required this.hintText,
       this.isPassword = false,
       super.key,
-      this.onChanged,
-      this.obscureText = false});
+      this.obscureText = false,
+      required this.textConroller});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +30,7 @@ class CustomTextField extends StatelessWidget {
           }
           return null; // Return null if the validation is successful
         },
-        onChanged: onChanged,
+        controller: textConroller,
         decoration: InputDecoration(
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(50.0),

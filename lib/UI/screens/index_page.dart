@@ -1,8 +1,11 @@
-import 'package:cinemax/screens/home_screen.dart';
-import 'package:cinemax/screens/search_screen.dart';
+import 'package:cinemax/UI/screens/home_screen.dart';
+import 'package:cinemax/UI/screens/profile_screen.dart';
+import 'package:cinemax/UI/screens/search_screen.dart';
+import 'package:cinemax/provider/page_provider.dart';
 import 'package:cinemax/style_guide/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:cuberto_bottom_bar/cuberto_bottom_bar.dart';
+import 'package:provider/provider.dart';
 
 class IndexPage extends StatefulWidget {
   @override
@@ -10,9 +13,7 @@ class IndexPage extends StatefulWidget {
 }
 
 class _IndexPageState extends State<IndexPage> {
-  int _currentPage = 0;
   String _currentTitle = "";
-
   List<TabData> tabs = [
     TabData(
       title: 'Home',
@@ -41,8 +42,29 @@ class _IndexPageState extends State<IndexPage> {
 
   @override
   Widget build(BuildContext context) {
+    int _currentPage = Provider.of<PageProvider>(context).currentPage;
+
+    Widget currentPageWidget;
+    switch (_currentPage) {
+      case 0:
+        currentPageWidget = HomeScreen();
+        break;
+      case 1:
+        currentPageWidget = SearchScreen();
+        break;
+      case 2:
+        currentPageWidget = Container();
+        break;
+      case 3:
+        currentPageWidget = const ProfileScreen();
+        break;
+      default:
+        currentPageWidget = Container();
+        break;
+    }
+
     return Scaffold(
-      body: _getPage(_currentPage),
+      body: currentPageWidget,
       bottomNavigationBar: CubertoBottomBar(
         barBackgroundColor: AppColors.primaryDark,
         key: const Key("BottomBar"),
@@ -50,24 +72,10 @@ class _IndexPageState extends State<IndexPage> {
         selectedTab: _currentPage,
         tabs: tabs,
         onTabChangedListener: (position, title, color) {
-          setState(() {
-            _currentPage = position;
-            _currentTitle = title;
-          });
+          Provider.of<PageProvider>(context, listen: false)
+              .setCurrentPage(position, title);
         },
       ),
     );
-  }
-
-  Widget _getPage(int page) {
-    switch (page) {
-      case 0:
-        return HomeScreen();
-      case 1:
-        return SearchScreen();
-      // Add cases for other pages here
-      default:
-        return Container(); // Return an empty container if the page is not found
-    }
   }
 }

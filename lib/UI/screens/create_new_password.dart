@@ -1,11 +1,15 @@
 import 'package:cinemax/style_guide/app_colors.dart';
 import 'package:cinemax/style_guide/app_typography.dart';
-import 'package:cinemax/widgets/custom_text_field.dart';
+import 'package:cinemax/UI/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-class ResetPasswordScreen extends StatelessWidget {
-  const ResetPasswordScreen({super.key});
+class CreatePassword extends StatelessWidget {
+  CreatePassword({super.key});
+
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmedPasswordController =
+      TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +25,7 @@ class ResetPasswordScreen extends StatelessWidget {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      Navigator.pushNamed(context, '/loginPage');
+                      Navigator.pushNamed(context, '/resetPassword');
                     },
                     child: Container(
                       height: 60,
@@ -45,36 +49,42 @@ class ResetPasswordScreen extends StatelessWidget {
               ),
             ),
             Text(
-              "Reset Password",
+              "Create New Password",
               style: typography.h1SemiBold.copyWith(color: Colors.white),
             ),
             Text(
-              "Recover your account password",
+              "Enter your new password",
               style: typography.h6Medium.copyWith(color: Colors.white),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 70),
-            const CustomTextField(
-              labelText: 'Email Address',
-              hintText: 'Enter Your Email',
+            const SizedBox(height: 50),
+            CustomTextField(
+              labelText: 'New Password',
+              hintText: 'Enter Your New Password',
+              isPassword: true,
+              textConroller: _passwordController,
             ),
-            SizedBox(
-              height: 16,
+            CustomTextField(
+              labelText: 'Confirm Password',
+              hintText: 'Confirm Your Password',
+              isPassword: true,
+              textConroller: _confirmedPasswordController,
+            ),
+            const SizedBox(
+              height: 50,
             ),
             SizedBox(
               height: 60,
               width: 350,
               child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/createPassword');
-                },
-                child: Text("Next",
-                    style: typography.h3Medium
-                        .copyWith(color: AppColors.textWhite)),
+                onPressed: () {},
                 style: ButtonStyle(
                   backgroundColor:
                       MaterialStateProperty.all<Color>(AppColors.primaryBlue),
                 ),
+                child: Text("Reset",
+                    style: typography.h3Medium
+                        .copyWith(color: AppColors.textWhite)),
               ),
             ),
           ],

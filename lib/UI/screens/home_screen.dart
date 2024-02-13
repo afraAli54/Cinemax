@@ -1,17 +1,19 @@
 import 'dart:convert';
 
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:cinemax/model/movie_model.dart';
+import 'package:cinemax/domain/model/movie_model.dart';
+import 'package:cinemax/UI/screens/profile_screen.dart';
+import 'package:cinemax/provider/page_provider.dart';
 import 'package:cinemax/style_guide/app_colors.dart';
 import 'package:cinemax/style_guide/app_typography.dart';
-import 'package:cinemax/screens/index_page.dart';
-import 'package:cinemax/widgets/home_slider_card.dart';
-import 'package:cinemax/widgets/movie_card.dart';
+import 'package:cinemax/UI/widgets/home_slider_card.dart';
+import 'package:cinemax/UI/widgets/movie_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -27,20 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    fetchUserName();
     fetchMovies(movieAPI);
-  }
-
-  Future<void> fetchUserName() async {
-    User? user = FirebaseAuth.instance.currentUser;
-    final DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(user?.uid)
-        .get();
-
-    setState(() {
-      userName = userSnapshot['name'];
-    });
   }
 
   Future<List<Movie>> fetchMovies(String movieAPI) async {
@@ -75,6 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     AppTypography typography = AppTypography();
+    final userName = ModalRoute.of(context)?.settings.arguments as String?;
 
     return Scaffold(
       appBar: AppBar(
@@ -87,10 +77,16 @@ class _HomeScreenState extends State<HomeScreen> {
           padding: const EdgeInsets.only(left: 20.0, top: 20),
           child: Row(
             children: [
-              CircleAvatar(
-                backgroundImage:
-                    AssetImage('assets/images/profile-picture.png'),
-                radius: 20,
+              GestureDetector(
+                onTap: () {
+                  Provider.of<PageProvider>(context, listen: false)
+                      .setCurrentPage(3, 'Profile');
+                },
+                child: CircleAvatar(
+                  backgroundImage:
+                      AssetImage('assets/images/profile-picture.png'),
+                  radius: 20,
+                ),
               ),
               SizedBox(width: 12),
               Column(
@@ -135,21 +131,27 @@ class _HomeScreenState extends State<HomeScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: TextField(
-              decoration: InputDecoration(
-                labelText: 'Search a title',
-                labelStyle: TextStyle(color: AppColors.textDarkGrey),
-                filled: true,
-                fillColor: AppColors.primarySoft,
-                contentPadding:
-                    EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                prefixIcon: Icon(Icons.search, color: AppColors.textDarkGrey),
-                prefixIconConstraints:
-                    BoxConstraints(minWidth: 48, minHeight: 48),
-                suffixIcon: Row(
-                  mainAxisSize: MainAxisSize.min,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            child: GestureDetector(
+              onTap: () {
+                Provider.of<PageProvider>(context, listen: false)
+                    .setCurrentPage(1, 'Search');
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(24),
+                  color: AppColors.primarySoft,
+                ),
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: Row(
                   children: [
+                    Icon(Icons.search, color: AppColors.textDarkGrey),
+                    SizedBox(width: 8),
+                    Text(
+                      'Search a title...',
+                      style: TextStyle(color: AppColors.textDarkGrey),
+                    ),
+                    Spacer(),
                     Container(
                       width: 1,
                       height: 24,
@@ -160,10 +162,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       onPressed: () {},
                     ),
                   ],
-                ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(24),
-                  borderSide: BorderSide.none,
                 ),
               ),
             ),

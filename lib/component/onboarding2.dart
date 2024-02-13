@@ -1,7 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cinemax/style_guide/app_colors.dart';
 import 'package:cinemax/style_guide/app_typography.dart';
-import 'package:cinemax/widgets/movie_view.dart';
+import 'package:cinemax/UI/widgets/movie_view.dart';
 import 'package:flutter/material.dart';
 
 class OnboardingV2 extends StatelessWidget {

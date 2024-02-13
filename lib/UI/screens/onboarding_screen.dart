@@ -1,7 +1,7 @@
 import 'package:cinemax/component/onboarding3.dart';
 import 'package:cinemax/component/onboarding1.dart';
 import 'package:cinemax/component/onboarding2.dart';
-import 'package:cinemax/screens/splash_screen.dart';
+import 'package:cinemax/UI/screens/splash_screen.dart';
 import 'package:cinemax/style_guide/app_colors.dart';
 import 'package:flutter/material.dart';
 
