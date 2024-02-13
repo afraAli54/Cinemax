@@ -2,9 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppTypography {
-  final String? montserratFont;
+  final String? montserratFont =  GoogleFonts.montserrat().fontFamily ;
 
-  AppTypography() : montserratFont = GoogleFonts.montserrat().fontFamily;
+  static final AppTypography _typography = AppTypography._internal() ;
+
+  factory AppTypography (){
+    return _typography ;
+  }
+
+  AppTypography._internal();
+
 
   TextStyle get h1SemiBold => TextStyle(
         fontSize: 24,

@@ -3,7 +3,7 @@ import 'package:cinemax/style_guide/app_typography.dart';
 import 'package:flutter/material.dart';
 
 class OnboardingV1 extends StatelessWidget {
-  AppTypography typography = AppTypography();
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -59,7 +59,7 @@ class OnboardingV1 extends StatelessWidget {
                 Center(
                   child: Text(
                     'Offers ad-free viewing of high quality',
-                    style: typography.h1SemiBold.copyWith(color: Colors.white),
+                    style: AppTypography().h1SemiBold.copyWith(color: Colors.white),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -67,7 +67,7 @@ class OnboardingV1 extends StatelessWidget {
                 Center(
                   child: Text(
                     'Semper in cursus magna et eu varius nunc adipiscing. Elementum justo, laoreet id sem semper parturient. ',
-                    style: typography.h5Medium.copyWith(color: Colors.white),
+                    style: AppTypography().h5Medium.copyWith(color: Colors.white),
                     textAlign: TextAlign.center,
                   ),
                 ),
