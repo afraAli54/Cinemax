@@ -1,16 +1,19 @@
 import 'dart:convert';
 
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cinemax/UI/screens/fav_screen.dart';
+import 'package:cinemax/bloc/profile_bloc/profile_bloc.dart';
+import 'package:cinemax/bloc/profile_bloc/profile_event.dart';
+import 'package:cinemax/bloc/profile_bloc/profile_state.dart';
 import 'package:cinemax/domain/model/movie_model.dart';
-import 'package:cinemax/UI/screens/profile_screen.dart';
+import 'package:cinemax/domain/usecase/profile_usecase.dart';
 import 'package:cinemax/provider/page_provider.dart';
 import 'package:cinemax/style_guide/app_colors.dart';
 import 'package:cinemax/style_guide/app_typography.dart';
 import 'package:cinemax/UI/widgets/home_slider_card.dart';
 import 'package:cinemax/UI/widgets/movie_card.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
@@ -21,6 +24,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final ProfileBloc profileBloc = ProfileBloc(profileUseCase: ProfileUseCase());
+
   String userName = '';
   String movieAPI = '';
 
@@ -34,9 +39,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<List<Movie>> fetchMovies(String movieAPI) async {
     const apiKey = '45a1ee9c5a52396669dced36b29a6d61';
-    final url = '$movieAPI?api_key=$apiKey';
+    final url = Uri.parse('$movieAPI?api_key=$apiKey');
 
-    final response = await http.get(Uri.parse(url));
+    final response = await http.get(url);
 
     if (response.statusCode == 200) {
       final List<dynamic> responseData = json.decode(response.body)['results'];
@@ -63,66 +68,82 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    profileBloc.add(FetchUserDataEvent());
     AppTypography typography = AppTypography();
-    final userName = ModalRoute.of(context)?.settings.arguments as String?;
 
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: Colors.transparent,
-        //elevation: 0,
-        flexibleSpace: Container(
-          height: 200,
-          width: 200,
-          padding: const EdgeInsets.only(left: 20.0, top: 20),
-          child: Row(
-            children: [
-              GestureDetector(
-                onTap: () {
-                  Provider.of<PageProvider>(context, listen: false)
-                      .setCurrentPage(3, 'Profile');
-                },
-                child: CircleAvatar(
-                  backgroundImage:
-                      AssetImage('assets/images/profile-picture.png'),
-                  radius: 20,
+        flexibleSpace: BlocBuilder<ProfileBloc, ProfileState>(
+          bloc: profileBloc,
+          builder: (context, state) {
+            if (state is ProfileLoadedState) {
+              return Container(
+                height: 200,
+                width: 200,
+                padding: const EdgeInsets.only(left: 20.0, top: 20),
+                child: Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        Provider.of<PageProvider>(context, listen: false)
+                            .setCurrentPage(3, 'Profile');
+                      },
+                      child: CircleAvatar(
+                        backgroundImage:
+                            AssetImage('assets/images/profile-picture.png'),
+                        radius: 20,
+                      ),
+                    ),
+                    SizedBox(width: 12),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Hello, ${state.user.username}',
+                          style: typography.h4SemiBold
+                              .copyWith(color: AppColors.textWhite),
+                        ),
+                        Text(
+                          'Let’s stream your favorite movie',
+                          style: typography.h6Medium
+                              .copyWith(color: AppColors.textGrey),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      width: 70,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => FavScreen()),
+                        );
+                      },
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Container(
+                          width: 32,
+                          height: 32,
+                          color: AppColors.primarySoft,
+                          child: SvgPicture.asset(
+                            "assets/images/heart.svg",
+                            height: 24,
+                            width: 24,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-              SizedBox(width: 12),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Hello, $userName',
-                    style: typography.h4SemiBold
-                        .copyWith(color: AppColors.textWhite),
-                  ),
-                  Text(
-                    'Let’s stream your favorite movie',
-                    style:
-                        typography.h6Medium.copyWith(color: AppColors.textGrey),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                width: 70,
-              ),
-              ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: Container(
-                  width: 32,
-                  height: 32,
-                  color: AppColors.primarySoft,
-                  child: SvgPicture.asset(
-                    "assets/images/heart.svg",
-                    height: 24,
-                    width: 24,
-                  ),
-                ),
-              ),
-            ],
-          ),
+              );
+            } else {
+              return Container();
+            }
+          },
         ),
       ),
       //bottomNavigationBar: BottomNavigationBarWidget(),
@@ -236,10 +257,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       return Padding(
                         padding: EdgeInsets.only(right: 8),
                         child: MovieCard(
+                          movieId: movie.id,
                           posterUrl:
                               'https://image.tmdb.org/t/p/w500${movie.posterPath}',
                           movieName: movie.title,
-                          genre: 'Action', // Replace with actual genre
+                          genre: 'Action',
                         ),
                       );
                     },

@@ -54,9 +54,11 @@ class _LoginScreenState extends State<LoginScreen> {
             if (state is LoginLoading) {
               isLoading = true;
             } else if (state is LoginSuccess) {
-              final username = state.username;
-              Navigator.pushReplacementNamed(context, '/indexPage',
-                  arguments: username);
+              //print(sessionId);
+              Navigator.pushReplacementNamed(
+                context,
+                '/indexPage',
+              );
               isLoading = false;
             } else if (state is LoginFailure) {
               context.showSnackBar(context, state.error);
@@ -75,7 +77,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         height: 50,
                       ),
                       Text(
-                        "Hi , Tiffany",
+                        "Hi",
                         style:
                             typography.h2SemiBold.copyWith(color: Colors.white),
                       ),

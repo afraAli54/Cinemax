@@ -1,3 +1,5 @@
+import 'package:cinemax/UI/screens/fav_screen.dart';
+import 'package:cinemax/UI/screens/movie_details.dart';
 import 'package:cinemax/bloc/login_bloc/login_bloc.dart';
 import 'package:cinemax/domain/usecase/login_usecase.dart';
 import 'package:cinemax/firebase_options.dart';
