@@ -225,7 +225,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
                 } else {
-                  return const CircularProgressIndicator();
+                  return const Center(child: CircularProgressIndicator());
                 }
               },
             ),
@@ -269,7 +269,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
                 } else {
-                  return const CircularProgressIndicator();
+                  return const Center(child: CircularProgressIndicator());
                 }
               },
             ),

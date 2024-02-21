@@ -52,7 +52,9 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
 
   Future<bool> getFavoriteStatus() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getBool('favorite_${widget.movieId}') ?? false;
+    bool state = prefs.getBool('favorite_${widget.movieId}') ?? false;
+    print(state);
+    return state;
   }
 
   Future<String?> getSessionId() async {
@@ -60,13 +62,14 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
     return sharedPreferences.getString('session_id');
   }
 
-  Future<void> addToFavorites(int movieId) async {
+  Future<void> addToFavorites(int movieId, bool isFavorite) async {
     final apiKey = '45a1ee9c5a52396669dced36b29a6d61';
     final sessionId = await getSessionId();
     final url =
         'https://api.themoviedb.org/3/account/20973161/favorite?api_key=$apiKey&session_id=${sessionId}';
     final headers = {'Content-Type': 'application/json;charset=utf-8'};
-    final body = '{"media_type":"movie","media_id":$movieId,"favorite":true}';
+    final body =
+        '{"media_type":"movie","media_id":$movieId,"favorite":$isFavorite}';
 
     final response = await http.post(
       Uri.parse(url),
@@ -75,11 +78,14 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
     );
 
     if (response.statusCode == 201) {
-      print('Movie added to favorites');
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setBool('favorite_$movieId', true);
+      await prefs.setBool('favorite_$movieId', isFavorite);
+    } else if (response.statusCode == 200) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('favorite_$movieId', isFavorite);
     } else {
-      print('Failed to add movie to favorites');
+      print(
+          'Failed to update movie favorite status. Error: ${response.statusCode}');
     }
   }
 
@@ -132,7 +138,10 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                             children: [
                               GestureDetector(
                                 onTap: () {
-                                  Navigator.pop(context);
+                                  Navigator.pushReplacementNamed(
+                                    context,
+                                    '/indexPage',
+                                  );
                                 },
                                 child: Container(
                                   margin: const EdgeInsets.all(5),
@@ -157,10 +166,13 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                               ),
                               GestureDetector(
                                 onTap: () async {
-                                  await addToFavorites(movie.id);
+                                  bool isFavorite = !isPressed;
+                                  await addToFavorites(movie.id, isFavorite);
                                   setState(() {
-                                    isPressed = !isPressed;
+                                    isPressed = isFavorite;
                                   });
+                                  print(movie.id);
+                                  print(isFavorite);
                                 },
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(8),

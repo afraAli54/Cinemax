@@ -93,6 +93,7 @@ class _SearchScreenState extends State<SearchScreen> {
                         posterUrl:
                             "https://image.tmdb.org/t/p/w500${movie.posterPath}",
                         genre: "action",
+                        movieId: movie.id,
                       );
                     },
                   );

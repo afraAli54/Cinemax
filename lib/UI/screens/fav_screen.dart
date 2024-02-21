@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cinemax/UI/widgets/movie_info_card.dart';
 import 'package:cinemax/domain/model/movie_model.dart';
 import 'package:cinemax/style_guide/app_colors.dart';
 import 'package:cinemax/style_guide/app_typography.dart';
@@ -7,16 +8,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FavScreen extends StatelessWidget {
   const FavScreen({super.key});
 
   @override
+  Future<String?> getSessionId() async {
+    final sharedPreferences = await SharedPreferences.getInstance();
+    return sharedPreferences.getString('session_id');
+  }
+
   Future<List<Movie>> getFavoriteMovies() async {
-    final url = Uri.https(
-        'api.themoviedb.org', '/3/account/20973161/favorite/movies', {
+    final sessionId = await getSessionId();
+
+    final url =
+        Uri.https('api.themoviedb.org', '/3/account/20973161/favorite/movies', {
       'api_key': "45a1ee9c5a52396669dced36b29a6d61",
-      'session_id': 'sessionId'
+      'session_id': sessionId,
     });
 
     final response = await http.get(url);
@@ -105,10 +114,12 @@ class FavScreen extends StatelessWidget {
                 itemCount: movies.length,
                 itemBuilder: (context, index) {
                   final movie = movies[index];
-                  return ListTile(
-                    title: Text(movie.title),
-                    leading: Image.network(
-                        "https://image.tmdb.org/t/p/w500${movie.posterPath}"),
+                  return MovieInfoCard(
+                    movieName: movie.title,
+                    posterUrl:
+                        "https://image.tmdb.org/t/p/w500${movie.posterPath}",
+                    genre: "action",
+                    movieId: movie.id,
                   );
                 },
               );
