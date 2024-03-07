@@ -94,14 +94,14 @@ class _LoginScreenState extends State<LoginScreen> {
                       CustomTextField(
                         labelText: 'User Name',
                         hintText: 'Enter Your UserNAme',
-                        textConroller: _usernameController,
+                        textController: _usernameController,
+                        isPassword: false,
                       ),
                       CustomTextField(
-                        textConroller: _passwordController,
+                        textController: _passwordController,
                         labelText: 'Password',
                         hintText: 'Enter Your Password',
                         isPassword: true,
-                        obscureText: true,
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(

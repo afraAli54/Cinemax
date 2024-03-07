@@ -2,10 +2,14 @@ import 'dart:convert';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cinemax/UI/screens/fav_screen.dart';
+import 'package:cinemax/bloc/movie_bloc/movie_bloc.dart';
+import 'package:cinemax/bloc/movie_bloc/movie_event.dart';
+import 'package:cinemax/bloc/movie_bloc/movie_state.dart';
 import 'package:cinemax/bloc/profile_bloc/profile_bloc.dart';
 import 'package:cinemax/bloc/profile_bloc/profile_event.dart';
 import 'package:cinemax/bloc/profile_bloc/profile_state.dart';
 import 'package:cinemax/domain/model/movie_model.dart';
+import 'package:cinemax/domain/usecase/movies_usecase.dart';
 import 'package:cinemax/domain/usecase/profile_usecase.dart';
 import 'package:cinemax/provider/page_provider.dart';
 import 'package:cinemax/style_guide/app_colors.dart';
@@ -25,6 +29,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final ProfileBloc profileBloc = ProfileBloc(profileUseCase: ProfileUseCase());
+  final MoviesBloc moviesBloc =
+      MoviesBloc(MovieUseCase(apiKey: '45a1ee9c5a52396669dced36b29a6d61'));
 
   String userName = '';
   String movieAPI = '';
@@ -34,7 +40,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    fetchMovies(movieAPI);
+    //fetchMovies(movieAPI);
+    moviesBloc.add(FetchMoviesEvent(movieAPI));
   }
 
   Future<List<Movie>> fetchMovies(String movieAPI) async {
@@ -188,19 +195,17 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           Expanded(
-            child: FutureBuilder<List<Movie>>(
-              future:
-                  fetchMovies('https://api.themoviedb.org/3/discover/movie'),
-              builder:
-                  (BuildContext context, AsyncSnapshot<List<Movie>> snapshot) {
-                if (snapshot.hasData) {
-                  final List<Movie> movies = snapshot.data!;
+            child: BlocBuilder<MoviesBloc, MoviesState>(
+              bloc: moviesBloc,
+              builder: (context, state) {
+                if (state is MoviesLoadedState) {
+                  final List<Movie> movies = state.movies;
                   return Padding(
                     padding: const EdgeInsets.only(top: 20),
                     child: SizedBox(
                       width: double.infinity,
                       child: CarouselSlider.builder(
-                        itemCount: 3,
+                        itemCount: movies.length,
                         itemBuilder: (context, index, _) {
                           final Movie movie = movies[index];
                           return HomeSliderCard(
@@ -222,8 +227,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   );
-                } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
+                } else if (state is MoviesErrorState) {
+                  return Text('Error: ${state.error}');
                 } else {
                   return const Center(child: CircularProgressIndicator());
                 }

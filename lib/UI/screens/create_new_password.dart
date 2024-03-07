@@ -62,13 +62,13 @@ class CreatePassword extends StatelessWidget {
               labelText: 'New Password',
               hintText: 'Enter Your New Password',
               isPassword: true,
-              textConroller: _passwordController,
+              textController: _passwordController,
             ),
             CustomTextField(
               labelText: 'Confirm Password',
               hintText: 'Confirm Your Password',
               isPassword: true,
-              textConroller: _confirmedPasswordController,
+              textController: _confirmedPasswordController,
             ),
             const SizedBox(
               height: 50,

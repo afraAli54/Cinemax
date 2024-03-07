@@ -59,19 +59,18 @@ class _SignupScreenState extends State<SignupScreen> {
               CustomTextField(
                 labelText: 'Full Name',
                 hintText: 'Enter Your Name',
-                textConroller: _usernameController,
+                textController: _usernameController,
               ),
               CustomTextField(
                 labelText: 'Email Address',
                 hintText: 'Enter Your Email',
-                textConroller: _useremailController,
+                textController: _useremailController,
               ),
               CustomTextField(
                 labelText: 'Password',
                 hintText: 'Enter Your Password',
                 isPassword: true,
-                obscureText: true,
-                textConroller: _passwordController,
+                textController: _passwordController,
               ),
               Padding(
                 padding:

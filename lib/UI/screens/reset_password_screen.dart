@@ -59,7 +59,7 @@ class ResetPasswordScreen extends StatelessWidget {
             CustomTextField(
               labelText: 'Email Address',
               hintText: 'Enter Your Email',
-              textConroller: _useremailController,
+              textController: _useremailController,
             ),
             SizedBox(
               height: 16,

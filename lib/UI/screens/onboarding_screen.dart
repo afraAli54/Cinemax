@@ -4,6 +4,7 @@ import 'package:cinemax/component/onboarding2.dart';
 import 'package:cinemax/UI/screens/splash_screen.dart';
 import 'package:cinemax/style_guide/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Onboarding extends StatefulWidget {
   @override
@@ -74,6 +75,11 @@ class _OnboardingState extends State<Onboarding> {
   }
 
   Widget _buildNextButton() {
+    Future<void> setOnboardingStatus() async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('hasShownOnboarding', true);
+    }
+
     return GestureDetector(
       onTap: () {
         if (_currentPage < 2) {
@@ -86,6 +92,7 @@ class _OnboardingState extends State<Onboarding> {
             _currentPage = _currentPage + 1;
           });
         } else {
+          setOnboardingStatus();
           Navigator.pushReplacementNamed(context, '/splashPage');
         }
       },
