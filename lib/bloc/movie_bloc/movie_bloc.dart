@@ -8,17 +8,17 @@ class MoviesBloc extends Bloc<MoviesEvent, MoviesState> {
   final MovieUseCase movieUseCase;
 
   MoviesBloc(this.movieUseCase) : super(MoviesInitial()) {
-    on<FetchMoviesEvent>(_mapFetchMoviesEventToState);
-  }
-
-  Stream<MoviesState> _mapFetchMoviesEventToState(
-      FetchMoviesEvent event, Emitter<MoviesState> emit) async* {
-    yield MoviesLoadingState();
-    try {
-      final List<Movie> movies = await movieUseCase.fetchMovies(event.movieAPI);
-      yield MoviesLoadedState(movies);
-    } catch (e) {
-      yield MoviesErrorState(e.toString());
-    }
+    on<MoviesEvent>((event, emit) async {
+      if (event is FetchMoviesEvent) {
+        emit(MoviesLoadingState());
+        try {
+          final List<Movie> movies =
+              await movieUseCase.fetchMovies() as List<Movie>;
+          emit(MoviesLoadedState(movies));
+        } catch (e) {
+          emit(MoviesErrorState(e.toString()));
+        }
+      }
+    });
   }
 }
