@@ -1,49 +1,43 @@
-import 'dart:convert';
-
-import 'package:cinemax/UI/widgets/movie_info_card.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:cinemax/bloc/fav_bloc/fav_bloc.dart';
+import 'package:cinemax/bloc/fav_bloc/fav_event.dart';
+import 'package:cinemax/bloc/fav_bloc/fav_state.dart';
 import 'package:cinemax/domain/model/movie_model.dart';
+import 'package:cinemax/UI/widgets/movie_info_card.dart';
 import 'package:cinemax/style_guide/app_colors.dart';
 import 'package:cinemax/style_guide/app_typography.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 
 class FavScreen extends StatelessWidget {
-  const FavScreen({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => FavMovieBloc(),
+      child: _FavScreenContent(),
+    );
+  }
+}
+
+class _FavScreenContent extends StatefulWidget {
+  @override
+  _FavScreenContentState createState() => _FavScreenContentState();
+}
+
+class _FavScreenContentState extends State<_FavScreenContent> {
+  late FavMovieBloc _favMovieBloc;
 
   @override
-  Future<String?> getSessionId() async {
-    final sharedPreferences = await SharedPreferences.getInstance();
-    return sharedPreferences.getString('session_id');
+  void initState() {
+    super.initState();
+    _favMovieBloc = BlocProvider.of<FavMovieBloc>(context);
+    _favMovieBloc.add(LoadFavoriteMoviesEvent());
   }
 
-  Future<List<Movie>> getFavoriteMovies() async {
-    final sessionId = await getSessionId();
-
-    final url =
-        Uri.https('api.themoviedb.org', '/3/account/20973161/favorite/movies', {
-      'api_key': "45a1ee9c5a52396669dced36b29a6d61",
-      'session_id': sessionId,
-    });
-
-    final response = await http.get(url);
-
-    if (response.statusCode == 200) {
-      final jsonData = jsonDecode(response.body);
-      final List<dynamic> results = jsonData['results'];
-      final List<Movie> favoriteMovies =
-          results.map<Movie>((json) => Movie.fromJson(json)).toList();
-      return favoriteMovies;
-    } else {
-      print('Error: ${response.statusCode}');
-      return [];
-    }
-  }
-
+  @override
   Widget build(BuildContext context) {
     AppTypography typography = AppTypography();
+
     return Scaffold(
       backgroundColor: AppColors.primaryDark,
       appBar: AppBar(
@@ -72,19 +66,18 @@ class FavScreen extends StatelessWidget {
           ),
         ),
       ),
-      body: FutureBuilder<List<Movie>>(
-        future: getFavoriteMovies(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
+      body: BlocBuilder<FavMovieBloc, FavMovieState>(
+        builder: (context, state) {
+          if (state is FavMovieInitialState) {
             return Center(
               child: CircularProgressIndicator(),
             );
-          } else if (snapshot.hasError) {
+          } else if (state is FavMovieLoadingState) {
             return Center(
-              child: Text('Failed to fetch favorite movies'),
+              child: CircularProgressIndicator(),
             );
-          } else {
-            final List<Movie> movies = snapshot.data!;
+          } else if (state is FavMovieLoadedState) {
+            final List<Movie> movies = state.movies;
             if (movies.isEmpty) {
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -93,14 +86,14 @@ class FavScreen extends StatelessWidget {
                     child: SvgPicture.asset('assets/images/empty.svg'),
                   ),
                   Text(
-                    'There is no movie yet!',
+                    'There are no favorite movies yet!',
                     style: typography.h4SemiBold
                         .copyWith(color: AppColors.textWhite),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 30),
                     child: Text(
-                      'Find your movie by Type title, categories, years, etc ',
+                      'Find your favorite movies and add them to your favorites list.',
                       style: typography.h4Regular
                           .copyWith(color: AppColors.textWhite),
                       textAlign: TextAlign.center,
@@ -124,9 +117,24 @@ class FavScreen extends StatelessWidget {
                 },
               );
             }
+          } else if (state is FavMovieErrorState) {
+            return Center(
+              child: Text(
+                'Error: ${state.errorMessage}',
+                style:
+                    typography.h4SemiBold.copyWith(color: AppColors.textWhite),
+              ),
+            );
           }
+          return Container();
         },
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _favMovieBloc.close();
+    super.dispose();
   }
 }

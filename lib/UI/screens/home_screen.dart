@@ -29,7 +29,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final ProfileBloc profileBloc = ProfileBloc(profileUseCase: ProfileUseCase());
-  final MoviesBloc moviesBloc = MoviesBloc(MovieUseCase());
+  final MoviesBloc moviesBloc = MoviesBloc();
 
   String userName = '';
   String movieAPI = '';

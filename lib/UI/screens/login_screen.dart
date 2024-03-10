@@ -29,7 +29,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
-    _loginBloc = LoginBloc(loginUseCase: LoginUseCase());
+    _loginBloc = LoginBloc();
   }
 
   @override

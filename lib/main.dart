@@ -1,10 +1,6 @@
-import 'package:cinemax/UI/screens/fav_screen.dart';
-import 'package:cinemax/UI/screens/movie_details.dart';
+import 'package:cinemax/bloc/fav_bloc/fav_bloc.dart';
 import 'package:cinemax/bloc/login_bloc/login_bloc.dart';
 import 'package:cinemax/bloc/movie_bloc/movie_bloc.dart';
-import 'package:cinemax/domain/usecase/login_usecase.dart';
-import 'package:cinemax/domain/usecase/movies_usecase.dart';
-import 'package:cinemax/firebase_options.dart';
 import 'package:cinemax/UI/screens/create_new_password.dart';
 import 'package:cinemax/UI/screens/home_screen.dart';
 import 'package:cinemax/UI/screens/login_screen.dart';
@@ -68,10 +64,13 @@ class _MyAppState extends State<MyApp> {
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
-            create: (context) => LoginBloc(loginUseCase: LoginUseCase()),
+            create: (context) => LoginBloc(),
           ),
           BlocProvider<MoviesBloc>(
-            create: (context) => MoviesBloc(MovieUseCase()),
+            create: (context) => MoviesBloc(),
+          ),
+          BlocProvider<FavMovieBloc>(
+            create: (context) => FavMovieBloc(),
           ),
         ],
         child: GetMaterialApp(
